@@ -8,14 +8,18 @@ public class ClickListener : MonoBehaviour
 	{
 		if (GameManager.Single.GameActive)
 		{
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonUp(0))
 			{
 				Vector2 mousePos = GameManager.Single.MainCamera.ScreenToWorldPoint(Input.mousePosition);
 
 				Collider2D col = Physics2D.OverlapCircle(mousePos, 0.2f);
 				if (col)
 				{
-
+					if (col.CompareTag("Target"))
+					{
+						Destroy(col.gameObject);
+						GameManager.Single.Score++;
+					}
 				}
 			}
 		}

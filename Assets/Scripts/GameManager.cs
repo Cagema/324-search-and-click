@@ -15,14 +15,20 @@ public class GameManager : MonoBehaviour
 	public bool GameActive;
 	public Vector2 RightUpperCorner;
 
+	Spawner _spawner;
+
 	[Header("Game parameters")]
 	[SerializeField] int _lives;
 	[SerializeField] float _speed;
 	[SerializeField] float _interval;
 	[SerializeField] bool _timer;
 	[SerializeField] float _timeLeft;
+	public int LeftBalls { get; private set; }
 
 	float _maxTime;
+
+	[SerializeField]
+	int _maxBalls;
 
 	[Header("Sounds")]
 	[SerializeField] AudioSource _music;
@@ -67,6 +73,12 @@ public class GameManager : MonoBehaviour
 		set
 		{
 			_score = value;
+			LeftBalls--;
+
+			if (LeftBalls <= 0)
+			{
+				ResetLevel();
+			}
 
 			if (_score > _bestScore)
 			{
@@ -74,10 +86,6 @@ public class GameManager : MonoBehaviour
 				PlayerPrefs.SetInt("BestScore", _bestScore);
 			}
 
-			_speed += 0.02f;
-			if (_interval > 0.7f) _interval -= 0.01f;
-
-			_timeLeft = _maxTime;
 			_gameUI.UpdateTexts();
 		}
 	}
@@ -100,12 +108,21 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void Start()
-	{
-		_bestScore = PlayerPrefs.GetInt("BestScore", 0);
+    {
+        _bestScore = PlayerPrefs.GetInt("BestScore", 0);
+		_spawner = FindObjectOfType<Spawner>();
 		_maxTime = _timeLeft;
-	}
+        ResetLevel();
+    }
 
-	private void FixedUpdate()
+    private void ResetLevel()
+    {
+        LeftBalls = _maxBalls;
+        _timeLeft = _maxTime;
+		_spawner.Spawn();
+    }
+
+    private void FixedUpdate()
 	{
 		if (GameActive)
 		{

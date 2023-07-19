@@ -10,6 +10,7 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _helpText;
 	[SerializeField] TextMeshProUGUI _scoreText;
+	[SerializeField] TextMeshProUGUI _ballsText;
 	[SerializeField] TextMeshProUGUI _currentScoreEndgameText;
     [SerializeField] TextMeshProUGUI _bestScoreText;
 
@@ -35,6 +36,7 @@ public class GameUI : MonoBehaviour
     public void UpdateTexts()
     {
         _scoreText.text = GameManager.Single.Score.ToString();
+        _ballsText.text = "x " + GameManager.Single.LeftBalls.ToString();
         _currentScoreEndgameText.text = _scoreText.text;
         _bestScoreText.text = GameManager.Single.BestScore.ToString();
     }
